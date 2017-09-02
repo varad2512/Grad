@@ -1,7 +1,9 @@
 import os
 from sklearn.preprocessing import LabelEncoder as lb
 import pandas as pd
+import numpy as np
 from pprint import pprint as pp
+from collections import defaultdict as d
 filename='dt-data.txt'
 mode='r'
 input_data = open(filename, mode)
@@ -16,4 +18,15 @@ for x in feature_names:
     df[x]=df[x].astype('category')
 for x in feature_names:
     df[x]=df[x].cat.codes
+target = np.array(df[' Enjoy'])
+print 'target:',target
+df = df.drop(labels=' Enjoy', axis=1)
+feature_list = d(np.array)
+for x in df:
+    feature_list[x]=np.array(df[x])
+for key,value in feature_list.iteritems():
+    print key,":",value
+
+
+
 
