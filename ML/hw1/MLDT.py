@@ -16,4 +16,4 @@ for x in feature_names:
     df[x]=df[x].astype('category')
 for x in feature_names:
     df[x]=df[x].cat.codes
-print df
+
