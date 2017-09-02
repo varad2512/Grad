@@ -23,6 +23,9 @@ df = df.drop(labels=' Enjoy', axis=1)
 feature_list = d(np.array)
 for x in df:
     feature_list[x]=np.array(df[x])
+for current_attribute in feature_list:
+    print current_attribute
+    #entropy_before_split = calculate_entropy(x, target)
 
 
 
