@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from collections import defaultdict as d
 import math
-#TODO def preprocessing():
+#TODO Define a preprocessing function as :"preprocessing():"
 
 filename ='dt-data.txt'
 mode ='r'
@@ -44,13 +44,14 @@ def informationGain(target, attribute):
     E1 = initialEntropy(target)
 
 
+
 def decisionTrees(input_features, target):
     '''
     :param input_features: features np array
     :param target: Labels np array
     :return: Decision Tree
     '''
-    #TODO
+    #TODO recursion and return value
     selected_attribute = min(informationGain(target, attribute) for attribute in input_features)
 
 
