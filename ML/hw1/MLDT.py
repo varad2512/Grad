@@ -30,7 +30,7 @@ def initialEntropy(attribute):
     count = []
     unique_elements = np.unique(attribute)
     for x in unique_elements:
-        count.append(np.size(np.where(attribute,x))[1])
+        count.append((attribute == x).sum())
     count = np.asarray(count)
     count = float(count/3)
     for x in count:
