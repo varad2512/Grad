@@ -1,5 +1,4 @@
 import sys
-
 def find_next_request(head, requests):
     minimum = sys.maxint
     for x in requests:
@@ -21,7 +20,9 @@ def sstf(head, requests):
     print wait_time
     print str(schedules[len(schedules)-1])+","+str(wait_time)
 
-input_file = open('queue.txt', 'r')
+start = 0
+end   = 199
+input_file = open(sys.argv[1], 'r')
 head, requests = input_file.readlines()
 head = int(head)
 requests = requests.split(',')
