@@ -32,7 +32,7 @@ def initialEntropy(attribute):
     for x in unique_elements:
         count.append((attribute == x).sum())
     count = np.asarray(count)
-    count = float(count/3)
+    count = count/3.0
     for x in count:
        if x!=0 : return_value+= x*(math.log((1/x),2))
     return return_value
