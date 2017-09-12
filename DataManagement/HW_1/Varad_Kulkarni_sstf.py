@@ -1,13 +1,14 @@
 import sys
 def find_next_request(head, requests):
     minimum = sys.maxint
-    req = 0
+    req = sys.maxint
     for x in requests:
-        if abs(head-x) <= minimum and x<req:
-            req = x
+        if abs(head-x) < minimum:
             minimum = abs(head-x)
+            req = x
+        if abs(head-x) == minimum:
+            req = min(x, req)
     return req
-
 def sstf(head, requests):
     wait_time = 0
     schedules = []
@@ -20,7 +21,6 @@ def sstf(head, requests):
     print(','.join([str(x) for x in schedules]))
     print wait_time
     print str(schedules[len(schedules)-1])+","+str(wait_time)
-
 start = 0
 end   = 199
 input_file = open(sys.argv[1], 'r')
