@@ -95,7 +95,6 @@ requests = requests.split(',')
 requests = [int(x) for x in requests]
 q1,q2=[],[]
 wait_time = 0
-
 if len(requests) <= 10:
     q1 = requests[:]
     head, wait_time = scan(head, q1, start, end)
@@ -104,24 +103,15 @@ else:
     q1 = requests[:10]
     requests = requests[10:]
     while(q1):
-        print q1
-        print requests
         result = scan(head, q1, start, end)
         head = result[0]
         wait_time += result[1]
-
         if len(requests) <= 10:
             q2 = requests[:]
         else:
             q2 = requests[:10]
-
         requests = requests[10:]
         del q1[:]
         q1 = q2[:]
         del q2[:]
-
-
-
-
-
     print head, wait_time
