@@ -90,4 +90,17 @@ head = int(head)
 requests = requests.split(',')
 requests = [int(x) for x in requests]
 print requests
-#head, wait_time = scan(head, requests, start, end)
+q1,q2=[],[]
+
+while(requests):
+    if len(requests) <= 10:
+        q1 = requests
+    else:
+        q1 = requests[:10]
+        requests = requests[10:]
+        if len(requests) <= 10:
+            q2 = requests
+        else:
+            q2 = requests[:10]
+        requests = requests[10:]
+head, wait_time = scan(head, requests, start, end)
