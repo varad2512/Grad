@@ -15,6 +15,7 @@ def scan(head, requests, start, end):
     wait_time = 0
     schedules = []
     first  = closest_to_head(head, requests)
+
     if first >= head:
         for x in range(first, end+1):
             if x in requests:
@@ -38,6 +39,7 @@ def scan(head, requests, start, end):
                     end = loop
                     requests.remove(loop)
                 loop = loop-1
+
             print(','.join([str(x) for x in schedules]))
             print wait_time
             print str(schedules[len(schedules)-1])+","+str(wait_time)
@@ -67,6 +69,7 @@ def scan(head, requests, start, end):
             print(','.join([str(x) for x in schedules]))
             print wait_time
             print str(schedules[len(schedules) - 1]) + "," + str(wait_time)
+    print head
 
 start = 0
 end   = 199

@@ -1,8 +1,9 @@
 import sys
 def find_next_request(head, requests):
     minimum = sys.maxint
+    req = 0
     for x in requests:
-        if abs(head-x) < minimum:
+        if abs(head-x) <= minimum and x<req:
             req = x
             minimum = abs(head-x)
     return req
