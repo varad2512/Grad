@@ -48,7 +48,7 @@ def scan(head, requests, start, end):
                 wait_time += abs(head - x)
                 head = x
                 requests.remove(x)
-        ßßif len(schedules) == number_of_req:
+        if len(schedules) == number_of_req:
             print(','.join([str(x) for x in schedules]))
             print wait_time
             print str(schedules[len(schedules) - 1]) + "," + str(wait_time)
