@@ -1,21 +1,17 @@
 import sys
 def closest_to_head(head, requests):
     minimum = sys.maxint
-    return_val = 0
+    return_val = sys.maxint
     for x in requests:
-        if abs(head-x) < minimum:
-            minimum = abs(head-x)
+        if abs(head - x) < minimum:
+            minimum = abs(head - x)
             return_val = x
+        if abs(head - x) == minimum:
+            return_val = min(x, return_val)
     return return_val
 
 def scan(head, requests_original, start, end):
-    Q1=[]
-    Q2=[]
-    #TODO:
-    '''  
-       seperate queues and ask TA about the position of the head after it
-       finishes serving the first queue 
-    '''
+
     number_of_req = len(requests)
     dif1 = abs(max(requests) - end)
     dif2 = abs(min(requests) - start)
@@ -31,23 +27,28 @@ def scan(head, requests_original, start, end):
                 requests.remove(x)
 
         if len(schedules) == number_of_req:
+            '''
             print(','.join([str(x) for x in schedules]))
             print wait_time
             print str(schedules[len(schedules) - 1]) + "," + str(wait_time)
+            '''
 
         else:
             wait_time+= dif1
+            head = end
             loop = end
             while(loop>=0):
                 if loop in requests:
                     schedules.append(loop)
-                    wait_time+=abs(end-loop)
-                    end = loop
+                    wait_time+=abs(head-loop)
+                    head = loop
                     requests.remove(loop)
                 loop = loop-1
+            '''
             print(','.join([str(x) for x in schedules]))
             print wait_time
             print str(schedules[len(schedules)-1])+","+str(wait_time)
+            '''
     else:
         for x in xrange(first, start, -1):
             if x in requests:
@@ -57,23 +58,29 @@ def scan(head, requests_original, start, end):
                 requests.remove(x)
 
         if len(schedules) == number_of_req:
+            '''
             print(','.join([str(x) for x in schedules]))
             print wait_time
             print str(schedules[len(schedules) - 1]) + "," + str(wait_time)
+            '''
 
         else:
             wait_time += dif2
+            head = start
             loop = start
             while (loop <= end):
                 if loop in requests:
                     schedules.append(loop)
-                    wait_time += abs(start - loop)
-                    start = loop
+                    wait_time += abs(head - loop)
+                    head = loop
                     requests.remove(loop)
                 loop = loop + 1
+            '''
             print(','.join([str(x) for x in schedules]))
             print wait_time
             print str(schedules[len(schedules) - 1]) + "," + str(wait_time)
+            '''
+    return head,wait_time
 
 start = 0
 end   = 199
@@ -82,4 +89,5 @@ head, requests = input_file.readlines()
 head = int(head)
 requests = requests.split(',')
 requests = [int(x) for x in requests]
-scan(head, requests, start, end)
+print requests
+#head, wait_time = scan(head, requests, start, end)
