@@ -9,7 +9,6 @@ def closest_to_head(head, requests):
         if abs(head-x)==minimum:
             return_val = min(x,return_val)
     return return_val
-
 def scan(head, requests, start, end):
     number_of_req = len(requests)
     dif1 = abs(max(requests) - end)
