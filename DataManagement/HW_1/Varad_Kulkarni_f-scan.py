@@ -80,7 +80,10 @@ wait_time = 0
 if len(requests) <= interval:
     q1 = requests[:]
     head, wait_time = scan(head, q1, start, end)
-    print head, wait_time
+    print(','.join([str(x) for x in final]))
+    print wait_time
+    print str(final[len(final) - 1]) + "," + str(wait_time)
+
 else:
     q1 = requests[:interval]
     requests = requests[interval:]
