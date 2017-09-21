@@ -4,48 +4,54 @@ from collections import defaultdict
 import numpy as np
 import random
 import matplotlib.pyplot as plt
+import copy
 from pprint import pprint
-# number of clusters
-
-def L2_distance(centroids, current_tuple):
+def Assignment_Stage(centroids, data):
     '''
-
     :param centroids: Dictionary
-    :param current_tuple: Tuple of X and Y coordinate
-    :return: Centroid assigned to X and Y with minimum distance (L2 Distance)
+    :param data: Pandas Data Frame
     '''
-    min = float("inf")
-    for key,items in centroids.iteritems():
-        if (math.sqrt(((items[0] - current_tuple[0])^2) + ((items[1] - current_tuple[1])^2))) < min:
-            match = [items[0],items[1]]
-            min   = math.sqrt(((items[0] - current_tuple[0])^2) + ((items[1] - current_tuple[1])^2))
-    return match
-
+    for i in centroids.keys():
+        data[str(i)] = np.sqrt((data['X'] - centroids[i][0])**2+(data['Y'] - centroids[i][1])**2)
+    data['Nearest'] = data[['0', '1', '2']].idxmin(axis=1).map(lambda x:int(x))
+    data['Colors'] = data['Nearest'].map(lambda x:colors[x])
+    return data
+def Compute_Stage(new_centroids):
+    for i in centroids.keys():
+        centroids[i][0] = np.mean(data[data['Nearest'] == i]['X'])
+        centroids[i][1] = np.mean(data[data['Nearest'] == i]['Y'])
+    return centroids
+def show(centroids, data):
+    for i in centroids.keys():
+        plt.scatter(*centroids[i], color=colors[i])
+    plt.scatter(data['X'], data['Y'], color=data['Colors'], alpha=0.3)
+    plt.show()
 k = 3
 data = []
 file_name = "clusters.txt"
 mode = "r"
 input_file = open(file_name, mode)
 for line in input_file.readlines():
-    data.append(tuple(map(float, line.strip().split(","))))
-#plot initial points
-x_max,x_min,y_max,y_min = max(zip(*data)[0]),min(zip(*data)[0]),max(zip(*data)[1]),min(zip(*data)[1])
-plt.scatter(*zip(*data))
-
-
-#randomly initialise centroids for the first iterations
+    data.append((map(float, line.strip().split(","))))
+data = np.array(data)
+data = pd.DataFrame({'X':data[:,0],'Y':data[:,1]})
+x_max,x_min,y_max,y_min = max(data['X']),min(data['X']),max(data['Y']),min(data['Y'])
+colors = {0:'r',1:'g',2:'b'}
 centroids = {i : [np.random.randint(x_min,x_max), np.random.randint(y_min,y_max)] for i in range(k)}
-print centroids
 for i in centroids.keys():
-    plt.scatter(*centroids[i],color = 'r')
+    plt.scatter(*centroids[i],color = colors[i])
+data = Assignment_Stage(centroids,data)
+plt.scatter(data['X'], data['Y'], color = data['Colors'], alpha = 0.3)
 plt.show()
-
-while(True):
-    #TODO : base case
-    assignments = defaultdict(list)
-    for i in data:
-        assigned_centroid = L2_distance(centroids,i)
-        assignments[assigned_centroid].append(i)
-
-    #TODO recomputation of centroids
-
+old_centroids = copy.deepcopy(centroids)
+centroids = Compute_Stage(centroids)
+show(centroids, data)
+data = Assignment_Stage(centroids,data)
+show(centroids, data)
+while True:
+    original = data['Nearest'].copy(deep=True)
+    centroids = Compute_Stage(centroids)
+    data = Assignment_Stage(centroids, data)
+    if original.equals(data['Nearest']):
+        break
+show(centroids, data)
