@@ -1,9 +1,11 @@
 import json
 from collections import defaultdict as dict
 from pprint import pprint
-input_file = 'dev-v1.1.json'
+import sys
+input_file = sys.argv[1]
 question_tags = dict(int)
-list_of_tags = ["how","how many","how much","what","when","where","which","who","whom"]
+questions = dict(list)
+list_of_tags = ["how many","how much","how","what","when","where","which","whom","who"]
 for x in list_of_tags:
     question_tags[x] = 0
 with open(input_file) as data_file:
@@ -15,5 +17,6 @@ for x in range(len1):
             for y in list_of_tags:
                 if q['question'].lower().startswith(y.lower()):
                     question_tags[y]+=1
-                    print q['question']
-print question_tags
+                    questions[y].append(q['question'])
+                    break
+print{key:value for key,value in question_tags.iteritems()},
