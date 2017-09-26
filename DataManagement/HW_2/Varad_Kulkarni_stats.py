@@ -19,4 +19,6 @@ for x in range(len1):
                     question_tags[y]+=1
                     questions[y].append(q['question'])
                     break
-print{key:value for key,value in question_tags.iteritems()},
+with open('result_stats.json', 'w') as fp:
+    json.dump(question_tags, fp)
+#print{key:value for key,value in question_tags.iteritems()},
