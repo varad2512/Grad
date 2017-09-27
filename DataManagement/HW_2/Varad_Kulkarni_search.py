@@ -1,3 +1,8 @@
+'''
+TODO arguments should be list of keywords. Current program designed for just one command line string arg.
+Convert it to list of multiple args
+'''
+
 import json
 import sys
 from pprint import pprint

@@ -1,3 +1,9 @@
+'''
+Names:
+Priyambada Jain(priyambj@usc.edu)
+Sai Sree Kamineni (skaminen@usc.edu)
+Varad Kulkarni (vdkulkar@usc.edu)
+'''
 import pandas as pd
 import numpy as np
 import math

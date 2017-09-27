@@ -45,7 +45,9 @@ plt.scatter(data['X'], data['Y'], color = data['Colors'], alpha = 0.3)
 plt.show()
 old_centroids = copy.deepcopy(centroids)
 centroids = Compute_Stage(centroids)
+show(centroids, data)
 data = Assignment_Stage(centroids,data)
+show(centroids, data)
 while True:
     original = data['Nearest'].copy(deep=True)
     centroids = Compute_Stage(centroids)
@@ -53,6 +55,3 @@ while True:
     if original.equals(data['Nearest']):
         break
 show(centroids, data)
-print centroids
-for index,rows in data.iterrows():
-    print (rows['X'],rows['Y'])," : ",tuple(centroids[rows['Nearest']])
