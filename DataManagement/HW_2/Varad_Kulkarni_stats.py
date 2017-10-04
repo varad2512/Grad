@@ -1,24 +1,27 @@
 import json
+import re
+from collections import OrderedDict
 from collections import defaultdict as dict
-from pprint import pprint
 import sys
 input_file = sys.argv[1]
-question_tags = dict(int)
+question_tags = OrderedDict()
 questions = dict(list)
-list_of_tags = ["how many","how much","how","what","when","where","which","whom","who"]
+pattern = r'(?<=\s){0}(?=\s)|^{0}(?=\s)|(?<=\s){0}$|^{0}$'
+list_of_tags = ["how","how many","how much","what","when","where","which","whom","who"]
 for x in list_of_tags:
     question_tags[x] = 0
 with open(input_file) as data_file:
     data = json.load(data_file)
 len1 = len(data['data'])
+questions_list = []
 for x in range(len1):
     for z in range(len(data['data'][x]['paragraphs'])):
         for q in data['data'][x]['paragraphs'][z]['qas']:
+            questions_list.append(q['question'])
             for y in list_of_tags:
-                if q['question'].lower().startswith(y.lower()):
+                if re.match(pattern.format(y.lower()), q['question'].lower()):
                     question_tags[y]+=1
                     questions[y].append(q['question'])
-                    break
-with open('result_stats.json', 'w') as fp:
+with open('1a.json', 'w') as fp:
     json.dump(question_tags, fp)
 #print{key:value for key,value in question_tags.iteritems()},
