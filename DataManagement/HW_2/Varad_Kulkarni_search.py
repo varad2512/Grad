@@ -16,8 +16,9 @@ for x in range(len1):
     for z in range(len(data['data'][x]['paragraphs'])):
         for q in data['data'][x]['paragraphs'][z]['qas']:
             if all(re.search(pattern.format(x), q['question'].lower(), flags=re.I) for x in search_string_words):
-                    result.append(OrderedDict([("id",str((q['id'].encode("utf-8")))),
-                                               ("question",str((q['question'].encode("utf-8")))),
-                                               ("answer",str((q['answers'][0]["text"].encode("utf-8"))))]))
+                    result.append(OrderedDict([("id",str((q['id'].encode("ascii","replace")))),
+                                               ("question",str((q['question'].encode("ascii", "replace")))),
+                                               ("answer",str((q['answers'][0]["text"].encode("ascii", "replace"))))]))
+
 with open("1b.json","w") as data:
     json.dump(result,data, indent = 4)

@@ -6,7 +6,7 @@ import sys
 input_file = sys.argv[1]
 question_tags = OrderedDict()
 questions = dict(list)
-pattern = r'(?<=\s){0}(?=\s)|^{0}(?=\s)|(?<=\s){0}$|^{0}$'
+pattern = r'^{0}(?=(\s)+)|^{0}(?=,)|^{0}\?$'
 list_of_tags = ["how","how many","how much","what","when","where","which","whom","who"]
 for x in list_of_tags:
     question_tags[x] = 0
@@ -19,9 +19,9 @@ for x in range(len1):
         for q in data['data'][x]['paragraphs'][z]['qas']:
             questions_list.append(q['question'])
             for y in list_of_tags:
-                if re.match(pattern.format(y.lower()), q['question'].lower()):
+                if re.match(pattern.format(y.lower()), q['question'].strip().lower()):
                     question_tags[y]+=1
                     questions[y].append(q['question'])
 with open('1a.json', 'w') as fp:
     json.dump(question_tags, fp)
-#print{key:value for key,value in question_tags.iteritems()},
+
