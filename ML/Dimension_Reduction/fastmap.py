@@ -3,6 +3,7 @@ import math
 from collections import defaultdict
 from pprint import pprint
 import sys
+import matplotlib.pyplot as plt
 #global arrays
 k = 2
 N = 10
@@ -22,9 +23,6 @@ for lines in distance.readlines():
     temp = map(int,lines.strip().split())
     distance_matrix[temp[0]-1,temp[1]-1] = temp[2]
     distance_matrix[temp[1]-1,temp[0]-1] = temp[2]
-pprint(distance_matrix)
-
-print distance_matrix[9,0]
 
 def find(init):
     maxed = 0
@@ -82,8 +80,6 @@ def fastMap(k):
     for i in range(10):
         for j in range(10):
             distance_matrix[i,j] = math.sqrt((distance_matrix[i,j]**2) - (X[i,column] - X[j,column])**2)
-    print "yes"
-    pprint(distance_matrix)
     column+=1
     fastMap(k-1)
 
@@ -91,4 +87,9 @@ def fastMap(k):
 fastMap(2)
 pprint(X)
 
+fig, ax = plt.subplots()
+ax.scatter(X[:,0], X[:,1])
 
+for i, txt in enumerate(strings):
+    ax.annotate(txt, (X[i,0],X[i,1]))
+plt.show()
