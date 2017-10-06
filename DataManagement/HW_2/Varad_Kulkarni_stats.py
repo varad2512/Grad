@@ -22,6 +22,6 @@ for x in range(len1):
                 if re.match(pattern.format(y.lower()), q['question'].strip().lower()):
                     question_tags[y]+=1
                     questions[y].append(q['question'])
-with open('1a.json', 'w') as fp:
+with open('1a_final.json', 'w') as fp:
     json.dump(question_tags, fp)
 
