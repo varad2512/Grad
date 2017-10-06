@@ -7,7 +7,9 @@ import string
 input_file = sys.argv[1]
 search_string = sys.argv[2].strip()
 search_string_words = search_string.split()
+all = []
 util = ''.join(x for x in(set(string.punctuation) - set(["'"])))
+table=string.maketrans(util,' '*len(util))
 with open(input_file) as data_file:
     data = json.load(data_file)
 len1 = len(data['data'])
@@ -16,7 +18,8 @@ for x in range(len1):
     for z in range(len(data['data'][x]['paragraphs'])):
         for q in data['data'][x]['paragraphs'][z]['qas']:
             counter = 0
-            words_in_question = q['question'].encode('ascii', 'ignore').translate(None, util).split()
+            processed = q['question'].encode('ascii','ignore').strip().translate(table)
+            words_in_question = processed.split()
             for it in search_string_words:
                 for w in words_in_question:
                     if w.lower()==it.lower():
@@ -26,6 +29,5 @@ for x in range(len1):
                 result.append(OrderedDict([("id",str((q['id'].encode("ascii","replace")))),
                                            ("question",str((q['question'].encode("ascii", "replace")))),
                                            ("answer",str((q['answers'][0]["text"].encode("ascii", "replace"))))]))
-
 with open("1b.json","w") as data:
     json.dump(result,data, indent = 4)
