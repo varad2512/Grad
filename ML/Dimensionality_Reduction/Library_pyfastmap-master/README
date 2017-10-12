@@ -1,0 +1,24 @@
+FastMap originally implemented by Gunnar Aastrand Grimnes (http://gromgull.net)
+StringMap and derivations are implemented by Mahmoud Abdelkader (http://blog.mahmoudimus.com)
+
+
+TODO:
+  - StringMap unit tests
+
+
+FastMap
+-------
+
+FastMap is a fast algorithm for indexing, data-mining, and visualization of traditional and multimedia datasets. It maps objects into points in some k-dimensional space (k is user-defined) such that the dis-similarities are preserved.
+
+Two benefits from this mapping:
+    - efficient retrieval
+    - visualization and data-mining
+
+The objects can now be plotted as points in 2-d or 3-d space, revealing potential clusters, correlations among attributes and other regularities that data-mining typically looks for.
+
+
+StringMap
+---------
+
+StringMap is a modification of FastMap where the recursion is removed from the canonical `GetPivot()` implementation and the distance is measured in terms of a similarity function that returns a metric distance. It is a linear algorithm to d^2, where d is the dimensionality, or orthogonal directions, of the StringMap. See the reference paper: http://flamingo.ics.uci.edu/pub/dasfaa03.pdf
