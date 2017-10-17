@@ -1,0 +1,71 @@
+Q1:
+select film.title,category.name
+from film_category INNER JOIN category on film_category.category_id=category.category_id INNER JOIN film on film_category.film_id = film.film_id
+order by film.title ASC;
+
+Q2:
+select c.name,count(f.film_id)
+from film_category as f INNER JOIN category as c on f.category_id = c.category_id
+group by c.name order by c.name;
+
+Q3:
+select c.name,count(f.film_id) as res
+from film_category as f INNER JOIN category as c on f.category_id = c.category_id
+group by c.name
+having res>=60
+order by res DESC;
+
+Q4:
+select c.name as result
+from category as c INNER JOIN film_category as f on c.category_id=f.category_id
+group by c.name
+order by count(f.film_id) DESC
+LIMIT 1;
+
+
+Q5:
+select distinct concat(first_name," ",last_name) as name
+from actor_info
+where actor_id in
+                (select actor_id from film_actor group by actor_id having count(film_id)>1)
+order by name asc;
+
+
+Q6:
+select count(distinct(r.customer_id))
+from rental r inner join customer c on
+c.customer_id = r.customer_id
+inner join inventory i on
+i.inventory_id = r.inventory_id
+inner join film_category f
+on f.film_id = i.film_id
+inner join category cat
+on f.category_id = cat.category_id 
+where c.Active = 1 and cat.name = 'Action';
+
+
+Q7:
+select count(distinct(r.customer_id))
+from rental r inner join customer c
+on c.customer_id = r.customer_id
+inner join inventory i
+on i.inventory_id = r.inventory_id
+inner join film_category f
+on f.film_id = i.film_id
+inner join category cat
+on f.category_id = cat.category_id 
+where cat.name = 'Action' and r.customer_id not in
+                                                  (select distinct(r.customer_id)
+                                                  from rental r
+                                                  inner join customer c
+                                                  on c.customer_id = r.customer_id
+                                                  inner join inventory i
+                                                  on i.inventory_id = r.inventory_id
+                                                  inner join film_category f
+                                                  on f.film_id = i.film_id
+                                                  inner join category cat
+                                                  on f.category_id = cat.category_id 
+                                                  where cat.name = 'Horror');
+
+
+
