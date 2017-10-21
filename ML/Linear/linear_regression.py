@@ -10,14 +10,9 @@ X_train = np.array(data)[:,[0,1]]
 Y_train = np.array(data)[:,[2]]
 Y_train = np.reshape(Y_train, (2000))
 data_points = X_train.shape[0]
-iterations = 1000
-store_cost = [None]*iterations
-weights = np.random.uniform(0.0,1.0, X_train.shape[1])
-for i in range(iterations):
-    cost = np.sum((np.dot(X_train, weights) - Y_train)**2) / (2 * data_points)
-    weights-= le * (np.dot(X_train.T , (np.dot(X_train, weights) - Y_train) ) / data_points)
-    store_cost[i] = cost
-    print i,":",cost
+
+weights = np.dot(np.dot(np.linalg.inv(np.dot(X_train.T,X_train)), X_train.T), Y_train)
+pprint(weights)
 
 with open("Regression_Output.txt","w") as fout:
     for i in range(data_points):
