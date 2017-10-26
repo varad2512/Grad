@@ -1,0 +1,26 @@
+from Queue import *
+class Tree:
+    def __init__(self,val):
+        self.right = None
+        self.left = None
+        self.value = val
+
+def levelorder(root):
+    if not root:
+        return None
+
+    q = Queue(maxsize = 0)
+    q.put_nowait(root)
+
+    while(q):
+        temp = q.get_nowait()
+        print temp.value,"\n"
+        if temp.left:
+            q.put_nowait(temp.left)
+        if temp.right:
+            q.put_nowait(temp.right)
+t = Tree(1)
+t.right = Tree(3)
+t.left = Tree(2)
+t.left.left = Tree(4)
+levelorder(t)

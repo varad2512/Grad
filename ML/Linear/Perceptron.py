@@ -32,11 +32,4 @@ for x in range(data_points):
         predictions.append(1.0)
     else:
         predictions.append(-1.0)
-result = zip(X_train, Y_train, np.array(predictions))
-with open("Perceptron_Result.txt","w") as out:
-    out.write("                 Data Points                  Label    Prediction")
-    out.write("\n")
-    for line in result:
-        out.write(str(line))
-        out.write("\n")
-
+np.savetxt(r'Perceptron_Result.txt', np.c_[X_train, Y_train, predictions], header='\t\t\t\t\t\t\t\t\t\t\tData\t\t\t\t\t\t\t\t\tLabel\t\t\t\tPrediction')
