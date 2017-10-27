@@ -12,7 +12,6 @@ Y_train = np.array(data)[:,[2]]
 data_points = X_train.shape[0]
 X_train = np.c_[np.ones(data_points),X_train]
 weights = np.dot(np.dot(np.linalg.inv(np.dot(X_train.T,X_train)), X_train.T), Y_train)
-pprint(weights)
 result = np.c_[X_train[:,1],X_train[:,2],Y_train,np.dot(X_train,weights)]
-np.savetxt('Regression_Output.txt',result, header='X1\t\t\t\t\t\tX2\t\t\t\t\t\tLabel\t\t\t\t\t\t\tPrediction')
-
+np.savetxt('Linear_Regression_Output',result, header='X1\t\t\t\t\t\tX2\t\t\t\t\t\tLabel\t\t\t\t\t\t\tPrediction')
+np.savetxt('Linear_Regression_Weights',weights,header="\t\tWeights\t\t")

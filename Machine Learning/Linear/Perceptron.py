@@ -33,3 +33,4 @@ for x in range(data_points):
     else:
         predictions.append(-1.0)
 np.savetxt(r'Perceptron_Result.txt', np.c_[X_train, Y_train, predictions], header='\t\t\t\t\t\t\t\t\t\t\tData\t\t\t\t\t\t\t\t\tLabel\t\t\t\tPrediction')
+np.savetxt(r'Perceptron_Weights.txt',weights, header="Weights")
