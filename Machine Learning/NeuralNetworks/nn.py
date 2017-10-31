@@ -1,7 +1,9 @@
 import re
 import numpy as np
+from pprint import pprint
+import time
+start_time = time.time()
 np.seterr(divide='ignore', invalid='ignore')
-
 train = 'downgesture_train.list'
 test  = 'downgesture_test.list'
 #Binary prediction 1 for down gesture | 0 for any other gesture
@@ -38,80 +40,77 @@ def read_pgm(filename, byteorder='>'):
                             offset=len(header)
                             ).reshape((int(height), int(width)))
 
-
-
 def train_function(train_data, train_label):
 
 	#initialization of hyperparameters
 	input_layer_weights  = np.random.uniform(-1000,1000,(train_data.shape[1], 100))
 	hidden_layer_weights = np.random.uniform(-1000,1000,(100, 1))
-	epochs = 1 #TODO 1000
+	epochs = 1000
 	size_of_input  = train_data.shape[1]
 	size_of_hidden = 100
 	size_of_output = 1
 
 	while(epochs):
 		epochs-= 1
-		for iterations in xrange(1): #TODO train_data.shape[0]):
+		print "Epoch:\t",epochs
+		for iterations in xrange(train_data.shape[0]): 
 			# Forward Propagation
 			X1 = train_data[iterations]
-			
 			S1 = np.dot(X1, input_layer_weights)
 			X2 = activation(S1)
-			
 			S2 = np.dot(X2, hidden_layer_weights)
 			X3 = activation(S2)
 			
-
 			# Prediction using sigmoid function
 			if X3 >= 0.5:
 				prediction = 1.0
 			else:
 				prediction = 0.0
 			
-			
 			#Error : Least Square Error
 			error = (prediction - train_label[iterations])**2
 
-			#Backpropagation for hidden layer
+			#Backpropagation for final layer of weights
 			final_delta_term1 = 2*(X3 - train_label[iterations])
 			final_delta_term2 = X3*(1 - X3)
-			final_delta       = final_delta_term1 * final_delta_term2c
+			final_delta       = final_delta_term1 * final_delta_term2
 			gradient_final    = (learning_rate * final_delta) * X2
-
 			#Gradient Descent for hidden layer weights
-
 			for x in xrange(100):
 				hidden_layer_weights[x]-= gradient_final[x]	 
 
+			#Backpropagation for first layer of weights
+			hidden_delta_term = final_delta * input_layer_weights * (X2 * (1-X2))
+			#Gradient Descent for first layer of weights
+			input_layer_weights -= learning_rate * hidden_delta_term * X2
+
+	np.savetxt('Weights_layer1', input_layer_weights)
+	np.savetxt('Weights_layer2', hidden_layer_weights)
+
+
+
+def test_function(test_data, test_label):
+	input_layer_weights  = np.loadtxt('Weights_Layer1')
+	hidden_layer_weights = np.loadtxt('Weights_Layer2')
+	prediction = []
+	for iterations in xrange(test_data.shape[0]):
+			X1 = test_data[iterations]
+			S1 = np.dot(X1, input_layer_weights)
+			X2 = activation(S1)
+			S2 = np.dot(X2, hidden_layer_weights)
+			X3 = activation(S2)
 			
+			# Prediction using sigmoid function
+			if X3 >= 0.5:
+				prediction.append(1.0)
+			else:
+				prediction.append(0.0)
+	prediction = np.asarray(prediction)
+	accuracy = (prediction == test_label).sum()/float(prediction.size)
+	print (accuracy * 100)
 
 
-			'''
-			#Backpropagation Algorithm for obtaining the gradients
-			
-			#Gradient for final layer
-			delta_final     = S2
-			delta_final_GD  = delta_final * S1
-
-			#Gradient for hidden layerc
-			delta_hidden    = np.dot((delta_final * hidden_layer_weights).T, activation(S1, derivative = True))
-			delta_hidden_GD = delta_hidden * X
-			print delta_hidden_GD.shape
-
-			#Gradient Descent for hidden layer and final layer weights
-			hidden_layer_weights -=  learning_rate * delta_final_GD.reshape([100,1])
-			input_layer_weights  -=  learning_rate * delta_hidden_GD
-
-			'''
-
-
-	#pprint(hidden_layer_weights)
-
-
-
-
-
+#Importing data for training
 input_data = []
 train_label = []
 for lines in open(train,"r").readlines():
@@ -123,10 +122,29 @@ for lines in open(train,"r").readlines():
 train_data = np.array(input_data, dtype = "float").reshape([len(input_data),32*30])
 train_label = np.array(train_label)
 
+#Importing data for Inference
+input_test = []
+test_label = []
+for lines in open(test,"r").readlines():
+	input_test.append(read_pgm(lines.strip()))
+	if 'down' in lines:
+		test_label.append(1.0)
+	else:
+		test_label.append(0.0)
+test_data  = np.array(input_test, dtype = "float").reshape([len(input_test),32*30])
+test_label = np.array(test_label)
 
-train_function(train_data, train_label)
 
 
+#Uncomment the next line to start training the network
+#train_function(train_data, train_label)
+
+#Uncomment the next line to start the inference on the test data based on the weights saved in files "Weights_Layer1" 
+#and "Weights_Layer2 which were learnt in the latest training pass"
+test_function(test_data, test_label)
+
+
+print("--- %s seconds ---" % (time.time() - start_time)) 
 
 
 
