@@ -1,7 +1,8 @@
 '''
 Sentence Classification using Convolutional Neural Networks
 References : https://arxiv.org/abs/1408.5882
-WildML - Explanation for NLP with Convolutional Neural Networks
+WildML - Explanation for NLP with Convolutional Neural Networks. Not Word2Vec used. In fact no pre=processing models used to 
+model the word vectors.
 '''
 import tensorflow as tf 
 import numpy as np
@@ -31,6 +32,7 @@ class HelperData:
 		negatives = [x.strip() for x in negatives]
 		x_train = positives + negatives
 		x_train = [self.clean_str(x) for x in x_train]
+		print max([len(x.split()) for x in x_train])
 		positive_labels = [[0, 1] for _ in positives]
 		negative_labels = [[1, 0] for _ in negatives]
 		y = np.concatenate([positive_labels, negative_labels], 0)

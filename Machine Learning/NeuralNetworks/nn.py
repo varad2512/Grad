@@ -2,6 +2,7 @@ import re
 import numpy as np
 from pprint import pprint
 import time
+from sklearn.neural_network import MLPClassifier
 start_time = time.time()
 np.seterr(divide='ignore', invalid='ignore')
 train = 'downgesture_train.list'
@@ -19,7 +20,8 @@ def activation(s, derivative = False):
 		return (1.0/ (1.0 + np.exp(-s)))
 
 def read_pgm(filename, byteorder='>'):
-    """Return image data from a raw PGM file as np array.
+    """
+    Return image data from a raw PGM file as np array.
 
     Format specification: http://netpbm.sourceforge.net/doc/pgm.html
 
@@ -56,8 +58,10 @@ def train_function(train_data, train_label):
 		for iterations in xrange(train_data.shape[0]): 
 			# Forward Propagation
 			X1 = train_data[iterations]
+			
 			S1 = np.dot(X1, input_layer_weights)
 			X2 = activation(S1)
+			
 			S2 = np.dot(X2, hidden_layer_weights)
 			X3 = activation(S2)
 			
@@ -80,9 +84,9 @@ def train_function(train_data, train_label):
 				hidden_layer_weights[x]-= gradient_final[x]	 
 
 			#Backpropagation for first layer of weights
-			hidden_delta_term = final_delta * input_layer_weights * (X2 * (1-X2))
+			hidden_delta_term = sum(final_delta * hidden_layer_weights) * (X2 * (1-X2))
 			#Gradient Descent for first layer of weights
-			input_layer_weights -= learning_rate * hidden_delta_term * X2
+			input_layer_weights -= learning_rate * X1.reshape([960,1]) * (hidden_delta_term.reshape([100,1]).T)
 
 	np.savetxt('Weights_layer1', input_layer_weights)
 	np.savetxt('Weights_layer2', hidden_layer_weights)
@@ -134,8 +138,6 @@ for lines in open(test,"r").readlines():
 test_data  = np.array(input_test, dtype = "float").reshape([len(input_test),32*30])
 test_label = np.array(test_label)
 
-
-
 #Uncomment the next line to start training the network
 #train_function(train_data, train_label)
 
@@ -144,7 +146,6 @@ test_label = np.array(test_label)
 test_function(test_data, test_label)
 
 
-print("--- %s seconds ---" % (time.time() - start_time)) 
 
 
 
