@@ -2,30 +2,38 @@ from collections import defaultdict
 import sys
 import math
 from pprint import pprint
+import pickle
 #Global Declarations
-uniqueTags  = {}
-uniqueWords = {}
-tagsAtEnd   = {}
-uniqueTags  = defaultdict(lambda : 0, uniqueTags)
-uniqueWords = defaultdict(lambda : 0, uniqueWords)
-tagsAtEnd   = defaultdict(lambda : 0, tagsAtEnd)
-uniqueTagsList  = []
-uniqueWordsList = []
-def findUniqueTags():
+transitionModel = defaultdict(dict)
+emissionModel   = defaultdict(dict)
+context = {}
+transitionMatrix  = {}
+emissionMatrix    = {}
+context           = defaultdict(lambda : 0, context)
+transitionMatrix  = defaultdict(lambda : 0, transitionMatrix)
+emissionMatrix    = defaultdict(lambda : 0, emissionMatrix)
+def findParams():
+	#TODO : Do not include the count for context if the tag is found at the end of the sentence. 
+	#Right now it is being included.
 	trainFile = open('en_train_tagged.txt','r')
 	for x in trainFile.readlines():
 		wordsTags = x.split()
+		previous  = 'start'
+		context[previous] += 1 
 		for y in wordsTags:
-			uniqueTags[y.rsplit('/',1)[1]] += 1
-			uniqueWords[y.rsplit('/',1)[0]] += 1
-		lastPair = wordsTags[-1]
-		tagsAtEnd[lastPair.rsplit('/',1)[1]] += 1
-	print uniqueTags
-	for key,value in uniqueTags.iteritems():
-		uniqueTags[key] -= tagsAtEnd[key]
-	print uniqueTags
+			word = y.rsplit('/',1)[0]
+			tag  = y.rsplit('/',1)[1]
+			transitionMatrix[previous+" "+tag] += 1
+			context[tag] += 1
+			emissionMatrix[tag+" "+word] += 1
+			previous = tag
+findParams()
+for key,value in transitionMatrix.iteritems():
+	transitionModel[key.split()[0]][key.split()[1]] = float(value)/context[key.split()[0]]
+for key,value in emissionMatrix.iteritems():
+	emissionModel[key.split()[0]][key.split()[1]] = float(value)/context[key.split()[0]]
+writef = open('model.txt','wb')
+dumped = [transitionModel, emissionModel]
+pickle.dump(dumped, writef)
 
-findUniqueTags()
-uniqueTagsList  = list(uniqueTags.keys())
-uniqueWordsList = list(uniqueWords.keys())
 
