@@ -31,12 +31,6 @@ for lines in testFile.readlines():
 						
 						bestScore[str(i+1)+" "+str(nexts)] = score 
 						backEdge[str(i+1)+" "+str(nexts)]  = str(i)+" "+str(prev)
-
-
-
-
-
-
 	#Fidning mininmum score for last state
 	finalState = defaultdict(dict)
 	minScore   = 100000000.0
@@ -49,29 +43,11 @@ for lines in testFile.readlines():
 			minKey   = key
 	backEdge[str(i+2)+" "+'End'] = str(i+1)+" "+str(minKey)
 	bestScore[str(i+2)+" "+'End'] = minScore
-print backEdge['5 End']
-print bestScore['5 End']
 
-#pprint(bestScore['4 RB'])
-
-print backEdge['4 RB']
-print backEdge['3 VBZ']
-print backEdge['2 NN']
-print backEdge['1 PRP']
-
-
-
-'''
-result = []
-
-for key,value in bestScore.iteritems():
-	result.append((int(key.split()[0]),key.split()[1],str(value)))
-
-temp = sorted(result, key = lambda x:x[0])
-pprint(temp)
-result1 = []
-for key,value in backEdge.iteritems():
-	if value != None:
-		result1.append((int(key.split()[0]),key.split()[1],str(value.split()[0]), str(value.split(' ')[1])))
-#pprint(sorted(result1, key = lambda x : x[0]))
-'''
+	''' BACKTRACKING FOR PATH '''
+	path = []
+	tag = str(i+2)+" "+'End'
+	while('start' not in tag):
+		path.append(tag.split()[1])
+		tag = backEdge[tag]
+	pprint(list(reversed(path)))
